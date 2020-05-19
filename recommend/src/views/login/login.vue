@@ -50,8 +50,8 @@ export default {
     }
     return {
       ruleForm: {
-        account: '',
-        password: ''
+        account: 'root',
+        password: '123456'
       },
       rules: {
         account: [
@@ -100,7 +100,7 @@ export default {
 <style scoped>
 .login {
   width: 100%;
-  background: url("F:\\boke\\recommend\\src\\assets\\img\\beijing.jpg")
+  background: url("http://47.57.165.173:4000/beijing.jpg")
     no-repeat;
   background-size: 100% 100%;
   height: 100%;

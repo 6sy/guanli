@@ -13,6 +13,7 @@ import viewAnalyse from '../views/viewAnalyse/viewAnalyse'
 
 Vue.use(VueRouter)
 const routes = [
+  { path: '/', redirect: '/login' },
   {
     path: '/login', component: login, meta: { isLogin: true }
   },
@@ -34,8 +35,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
+  // mode: 'history',
+  // base: process.env.BASE_URL,
   routes
 })
 

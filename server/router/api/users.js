@@ -49,6 +49,21 @@ router.post('/register', async ctx => {
     ctx.body = { success: false }
   }
 })
+// registerOne
+router.get('/registerOne', async ctx => {
+  
+  ctx.request.body.account='root'
+  ctx.request.body.password='123456'
+  ctx.request.body.type='总管'
+  ctx.request.body.password = tools.enbcrypt(ctx.request.body.password)
+  const result = await userModel.create(ctx.request.body)
+  if (result) {
+    ctx.body = { success: true }
+  } else {
+    ctx.body = { success: false }
+  }
+})
+
 
 // get user
 router.get('/getUsers', async ctx => {

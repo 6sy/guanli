@@ -10,7 +10,7 @@ const path = require('path')
 // 上传照片
 router.post('/uploadImg', upload.single('file'), ctx => {
   console.log(ctx.request.file)
-  let imgPath = 'F:\\boke\\server\\public\\'
+  let imgPath = 'C:\\Users\\Administrator\\Desktop\\boke\\backstage\\server\\public\\'
   fs.writeFile(imgPath + ctx.request.file.originalname, ctx.request.file.buffer, function (err) {
     console.log(err)
   })

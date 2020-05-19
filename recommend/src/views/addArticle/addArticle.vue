@@ -126,7 +126,7 @@ export default {
         title: '',
         describle: '',
         type: '',
-        img: 'http://127.0.0.1:4000/vue.jpg',
+        img: 'http://47.57.165.173:4000/vue.jpg',
         text: '',
         author: localStorage.getItem('user')
       },
@@ -190,12 +190,12 @@ export default {
       var formData = new FormData()
       formData.append('file', file)
       this.$http({
-        url: 'http://127.0.0.1:4000/api/article/uploadImg',
+        url: 'http://47.57.165.173:4000/api/article/uploadImg',
         method: 'post',
         data: formData,
         headers: { 'Content-Type': 'multipart/form-data' }
       }).then((url) => {
-        this.form.img = 'http://127.0.0.1:4000/' + url.data.url
+        this.form.img = 'http://47.57.165.173:4000/' + url.data.url
       })
     },
     // 提交表单，创建文章

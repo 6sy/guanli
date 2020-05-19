@@ -12,9 +12,8 @@ import echarts from 'echarts'
 import loadVue from 'load-vue'
 Vue.use(loadVue)
 Vue.prototype.$echarts = echarts
-
 Vue.use(mavonEditor)
-axios.defaults.baseURL = 'http://127.0.0.1:4000/'
+axios.defaults.baseURL = 'http://47.57.165.173:4000/'
 // request拦截器，展示进度条
 Vue.prototype.$http = axios
 axios.interceptors.request.use(config => {

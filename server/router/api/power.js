@@ -9,6 +9,15 @@ router.post('/addRole', async ctx => {
     ctx.body = { success: true }
   }
 })
+// 第一次添加角色
+router.get('/addRoleOne', async ctx => {
+  ctx.request.body.role='管理员'
+  ctx.request.body.power=[]
+  const result = await powerModel.create(ctx.request.body)
+  if (result) {
+    ctx.body = { success: true }
+  }
+})
 
 router.get('/getRoles', async ctx => {
   const result = await powerModel.find()

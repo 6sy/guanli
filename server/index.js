@@ -11,7 +11,8 @@ let roles = require('./router/api/power')
 let user = require('./router/api/users')
 let app = new koa()
 let router = new Router()
-// 静态资源
+const compress = require('koa-compress')
+app.use(compress())
 app.use(serve(__dirname + "/public"));
 app.use(bodyParser())
 // 坑，要使用async await 设置，否则响应不了数据

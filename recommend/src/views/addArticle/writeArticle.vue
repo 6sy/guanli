@@ -94,12 +94,12 @@ export default {
       var formData = new FormData()
       formData.append('file', file)
       this.$http({
-        url: 'http://127.0.0.1:4000/api/article/uploadImg',
+        url: 'http://47.57.165.173:4000/api/article/uploadImg',
         method: 'post',
         data: formData,
         headers: { 'Content-Type': 'multipart/form-data' }
       }).then((url) => {
-        this.$refs.md.$img2Url(pos, 'http://127.0.0.1:4000/' + url.data.url)
+        this.$refs.md.$img2Url(pos, 'http://47.57.165.173:4000/' + url.data.url)
       })
     },
     imgDel () {
