@@ -7,7 +7,7 @@
         <el-breadcrumb-item>商品管理</el-breadcrumb-item>
       </el-breadcrumb>
       <div>
-        <el-button @click='addItem'>
+        <el-button @click='dialogVisible=true' style='marginTop:10px'>
           添加商品
         </el-button>
         </div>
@@ -65,11 +65,57 @@
             </template>
           </el-table-column>
         </el-table>
-
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-          </span>
+        <el-dialog
+          :title="str"
+          :visible.sync="dialogVisible"
+          width="80%"
+          >
+          <el-form ref="form" :model="form" label-width="80px">
+            <el-form-item label="类型">
+              <el-input v-model="form.name"></el-input>
+            </el-form-item>
+            <el-form-item label="商品描述">
+              <el-input v-model="form.msg"></el-input>
+            </el-form-item>
+            <el-form-item label="发货地址">
+              <el-input v-model="form.adress"></el-input>
+            </el-form-item>
+             <el-form-item label="当前价钱">
+              <el-input v-model="form.nowPrice"></el-input>
+            </el-form-item>
+            <el-form-item label="原钱">
+              <el-input v-model="form.oldPrice"></el-input>
+            </el-form-item>
+            <el-form-item label="首页照片">
+              <el-input v-model="form.img_one"></el-input>
+            </el-form-item>
+            <el-form-item label="运费">
+              <el-input v-model="form.transport"></el-input>
+            </el-form-item>
+            <el-form-item label="轮播图照片1">
+              <el-input v-model="form.swiper[0]"></el-input>
+            </el-form-item>
+            <el-form-item label="轮播图照片2">
+              <el-input v-model="form.swiper[1]"></el-input>
+            </el-form-item>
+            <el-form-item label="颜色1">
+              <el-input v-model="form.color[0]"></el-input>
+            </el-form-item>
+            <el-form-item label="颜色2">
+              <el-input v-model="form.color[1]"></el-input>
+            </el-form-item>
+            <el-form-item label="尺寸1">
+              <el-input v-model="form.size[0]"></el-input>
+            </el-form-item>
+            <el-form-item label="尺寸2">
+              <el-input v-model="form.size[1]"></el-input>
+            </el-form-item>
+             <el-form-item>
+    <el-button type="primary" @click="onSubmit">立即创建</el-button>
+    <el-button>取消</el-button>
+  </el-form-item>
+          </el-form>
+        </el-dialog>
     </el-card>
   </div>
 </template>
@@ -128,8 +174,20 @@ export default {
       str:"",
       // 订单列表
       showOrderData:[],
-      userAccount:''
-
+      userAccount:'',
+      // 添加商品
+      form:{
+         type:"",
+         msg:"",
+         adress:'',
+         nowPrice:"",
+         oldPrice:"",
+         img_one:"",
+        transport:"",
+        swiper:[],
+        color:[],
+        size:[],
+      }
     }
   },
   filters: {
@@ -173,8 +231,23 @@ export default {
         this.getAllItem()
       }
     },
-    async addItem(){
-
+    async onSubmit(){
+     const result = await this.$http({
+        method: 'post',
+        url: 'api/shops/addShop',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+        },
+        data:this.$qs.stringify(this.form)
+      })
+      if(result.data.success){
+        this.$message.success('添加成功')
+        this.getAllItem()
+        this.dialogVisible=false
+      }else{
+        this.$message.error('添加失败')
+        this.dialogVisible=false
+      }
     }
   }
 }

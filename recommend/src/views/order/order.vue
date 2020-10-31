@@ -6,7 +6,8 @@
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>订单管理</el-breadcrumb-item>
       </el-breadcrumb>
-          <!-- 订单列表 -->
+      <div>
+        <!-- 订单列表 -->
             <el-table :data="showOrderData"
                   style="width: 100%" >
           <el-table-column label="订单id"
@@ -50,7 +51,7 @@
             </template>
           </el-table-column>
         </el-table>
-
+      </div>
           <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
             <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
