@@ -2,7 +2,7 @@
   <div class='login'>
     <div class='login-from'>
       <!-- 标题 -->
-      <p>六六的后台管理</p>
+      <p>商城管理后台管理</p>
       <!-- 表单验证 -->
       <el-form :model="ruleForm"
                status-icon
@@ -24,7 +24,7 @@
           <el-button type="primary"
                      @click="submitForm('ruleForm')">提交</el-button>
           <el-button @click="resetForm('ruleForm')"
-                     style='margin-left:60px'>重置</el-button>
+                     style='margin-left:10px'>重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -32,6 +32,7 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
 export default {
   data () {
     var checkAge = (rule, value, callback) => {
@@ -50,8 +51,8 @@ export default {
     }
     return {
       ruleForm: {
-        account: 'root',
-        password: '123456'
+        account: '',
+        password: ''
       },
       rules: {
         account: [
@@ -65,28 +66,15 @@ export default {
   },
   methods: {
     submitForm (formName) {
+      let that=this
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          const result = await this.$http({
-            method: 'post',
-            url: 'api/user/login',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-            },
-            data: this.$qs.stringify(this.ruleForm)
-          })
-          if (result.data.success) {
-            this.$message.success('登录成功')
-            const token = result.headers['my-token']
-            const role = result.data.data.type
-            const user = result.data.data.account
-            localStorage.setItem('role', role)
-            localStorage.setItem('my-token', token)
-            localStorage.setItem('user', user)
-            this.$router.push('/home')
-          } else {
-            this.$message.error('密码错误')
-            this.$refs[formName].resetFields()
+          if(that.ruleForm.account=='root' &&that.ruleForm.password=='123456'){
+            this.$message.success('登陆成功')
+            this.$router.push('/userList')
+            window.localStorage.setItem('token',123)
+          }else{
+            this.$message.error('登陆失败')
           }
         }
       })
@@ -100,18 +88,19 @@ export default {
 <style scoped>
 .login {
   width: 100%;
-  background: url("http://47.57.165.173:4000/beijing.jpg")
+  background: url("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=898686906,2953878640&fm=26&gp=0.jpg")
     no-repeat;
   background-size: 100% 100%;
   height: 100%;
 }
 .login-from {
   width: 600px;
-  height: 300px;
-  position: relative;
-  margin: 0 auto;
-  top: 300px;
-  background: wheat;
+  height: 350px;
+  position: fixed;
+  background: rgb(179, 206, 245);
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
 }
 .login-from p {
   color: white;
@@ -123,6 +112,5 @@ export default {
 }
 .demo-ruleForm {
   width: 400px;
-  margin: 0 auto;
 }
 </style>

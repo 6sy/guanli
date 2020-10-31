@@ -1,35 +1,28 @@
+/* eslint-disable */
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import login from '../views/login/login'
 import home from '../views/home/home'
 import userList from '../views/user/userList'
-import power from '../views/power/power'
 import welcome from '../views/home/welcome'
-import addArticle from '../views/addArticle/addArticle'
-import writeArticle from '../views/addArticle/writeArticle'
-import article from '../views/article/article'
-import comment from '../views/comments/comment'
-import viewAnalyse from '../views/viewAnalyse/viewAnalyse'
-
+import order from '../views/order/order'
+import item from '../views/shopItem/item.vue'
+import adress from '../views/adress/adrress.vue'
 Vue.use(VueRouter)
 const routes = [
   { path: '/', redirect: '/login' },
   {
     path: '/login', component: login, meta: { isLogin: true }
   },
-  { path: '/writeArticle', component: writeArticle, meta: { isLogin: true }, name: 'writeArticle' },
   // eslint-disable-next-line
   {
     // eslint-disable-next-line
-    path: '/home', component: home, redirect: '/welcome', meta: { isLogin: false },
+    path: '/home', component: home, redirect: '/userList', meta: { isLogin: false },
     children: [
       { path: '/userList', component: userList, meta: { isLogin: false } },
-      { path: '/power', component: power, meta: { isLogin: false } },
-      { path: '/welcome', component: welcome, meta: { isLogin: false } },
-      { path: '/addArticle', component: addArticle, meta: { isLogin: false } },
-      { path: '/articleList', component: article, meta: { isLogin: false } },
-      { path: '/commentList', component: comment, meta: { isLogin: false } },
-      { path: '/viewAnalyse', component: viewAnalyse, meta: { isLogin: false } }
+      { path: '/order', component: order, meta: { isLogin: false } },
+      { path: '/shops', component: item, meta: { isLogin: false } },
+      { path: '/adress', component:adress, meta: { isLogin: false } },
     ]
   }
 ]
@@ -40,4 +33,16 @@ const router = new VueRouter({
   routes
 })
 
+// router.beforeEach((to,from,next)=>{
+//   let token=window.localStorage.getItem('login')
+//   if(to.meta.isLogin){
+//     next()
+//   }else{
+//     if(token){
+//       next()
+//     }else{
+//       router.push('/login')
+//     }
+//   }
+// })
 export default router

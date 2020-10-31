@@ -4,40 +4,8 @@
       <!-- 面包屑导航 -->
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-        <el-breadcrumb-item>用户列表</el-breadcrumb-item>
+        <el-breadcrumb-item>订单管理</el-breadcrumb-item>
       </el-breadcrumb>
-        <!-- 用户列表 -->
-        <el-table :data="showData"
-                 >
-          <el-table-column label="创建时间"
-                           width="120">
-            <template slot-scope="scope">
-              <span>{{ scope.row.date.substring(0,10) }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="用户名"
-                           width="180">
-            <template slot-scope="scope">
-              <span>{{ scope.row.user_account}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button size="mini"
-                         @click="lookOrder(scope.row)">我的订单</el-button>
-              <el-button size="mini"
-                         type="danger"
-                         >删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-
-        <el-dialog
-          :title="str"
-          :visible.sync="dialogVisible"
-          width="80%"
-          >
           <!-- 订单列表 -->
             <el-table :data="showOrderData"
                   style="width: 100%" >
@@ -53,6 +21,13 @@
               <span>{{ scope.row.adress.province+scope.row.adress.city+scope.row.adress.city}}</span>
             </template>
           </el-table-column>
+            <el-table-column label="详细地址"
+                           width="280">
+            <template slot-scope="scope">
+              <span>{{ scope.row.adress.area+scope.row.adress.careAdress}}</span>
+            </template>
+          </el-table-column>
+
           <el-table-column label="收获人"
                            width="80">
             <template slot-scope="scope">
@@ -74,20 +49,12 @@
                <el-tag v-if='scope.row.state==3'>交易完成</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button size="mini"
-                         type="danger"
-                         v-if='scope.row.state==1' @click='send(scope.row.orderId)'>发货</el-button>
-            </template>
-          </el-table-column>
         </el-table>
 
           <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
             <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
           </span>
-      </el-dialog>
     </el-card>
   </div>
 </template>
@@ -163,7 +130,7 @@ export default {
   },
   created () {
     this.roles = role.roles
-    this.getUserList()
+    this.getAllOrder()
   },
   methods: {
     // 获取角色
@@ -205,6 +172,25 @@ export default {
         this.dialogVisible=false
         this.getUserList()
       }
+    },
+    async getAllOrder(){
+        const result = await this.$http({
+        method: 'get',
+        url: 'api/users/getUsers',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+        }
+      })
+      let list=[]
+      if(result.data.success){
+          let users=result.data.data
+          if(users.length){
+              for(let i=0;i<users.length;i++){
+                  list=[...list,...users[i].user_order]
+              }
+          }
+      }
+      this.showOrderData=list
     }
   }
 }

@@ -4,81 +4,64 @@
       <!-- 面包屑导航 -->
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-        <el-breadcrumb-item>用户列表</el-breadcrumb-item>
+        <el-breadcrumb-item>商品管理</el-breadcrumb-item>
       </el-breadcrumb>
-        <!-- 用户列表 -->
-        <el-table :data="showData"
-                 >
-          <el-table-column label="创建时间"
-                           width="120">
-            <template slot-scope="scope">
-              <span>{{ scope.row.date.substring(0,10) }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="用户名"
-                           width="180">
-            <template slot-scope="scope">
-              <span>{{ scope.row.user_account}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button size="mini"
-                         @click="lookOrder(scope.row)">我的订单</el-button>
-              <el-button size="mini"
-                         type="danger"
-                         >删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-
-        <el-dialog
-          :title="str"
-          :visible.sync="dialogVisible"
-          width="80%"
-          >
+      <div>
+        <el-button @click='addItem'>
+          添加商品
+        </el-button>
+        </div>
           <!-- 订单列表 -->
             <el-table :data="showOrderData"
                   style="width: 100%" >
-          <el-table-column label="订单id"
-                           width="120">
+          <el-table-column label="类型"
+                           width="60">
             <template slot-scope="scope">
-              <span>{{scope.row.orderId }}</span>
+              <el-tag>{{scope.row.s_type }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="订单地址"
+          <el-table-column label="商品描述"
                            width="280">
             <template slot-scope="scope">
-              <span>{{ scope.row.adress.province+scope.row.adress.city+scope.row.adress.city}}</span>
+              <span>{{ scope.row.s_msg}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="收获人"
+            <el-table-column label="收藏人数"
                            width="80">
             <template slot-scope="scope">
-              <span>{{ scope.row.adress.person}}</span>
+              <span>{{ scope.row.s_collect}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="联系方式"
+
+          <el-table-column label="价格"
                            width="80">
             <template slot-scope="scope">
-              <span>{{ scope.row.adress.phone}}</span>
+              <span>{{ scope.row.s_newPrice}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="订单状态"
+          <el-table-column label="运费"
                            width="80">
             <template slot-scope="scope">
-              <el-tag v-if='scope.row.state==0'>未支付</el-tag>
-              <el-tag v-if='scope.row.state==1'>已支付</el-tag>
-              <el-tag v-if='scope.row.state==2'>代收货</el-tag>
-               <el-tag v-if='scope.row.state==3'>交易完成</el-tag>
+              <span>{{ scope.row.s_transport}}</span>
+            </template>
+          </el-table-column>adress
+          <el-table-column label="发货地址"
+                           width="100">
+            <template slot-scope="scope">
+              <span>{{ scope.row.s_adress}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="状态"
+                           width="90">
             <template slot-scope="scope">
-              <el-button size="mini"
-                         type="danger"
-                         v-if='scope.row.state==1' @click='send(scope.row.orderId)'>发货</el-button>
+              <el-tag v-if='scope.row.s_vip>0'>已上架</el-tag>
+              <el-tag v-else type='danger'>已下架</el-tag>
+            </template>
+          </el-table-column>v-else
+          <el-table-column label="操作" width='90'>
+            <template slot-scope="scope">
+              <el-button v-if='scope.row.s_vip>0' @click='handle(0,scope.row.s_uid)' type='danger'>下架</el-button>
+              <el-button v-else @click='handle(1,scope.row.s_uid)'>上架</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -87,7 +70,6 @@
             <el-button @click="dialogVisible = false">取 消</el-button>
             <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
           </span>
-      </el-dialog>
     </el-card>
   </div>
 </template>
@@ -127,12 +109,6 @@ export default {
         account: '',
         role: ''
       },
-      // 创建用户表单
-      form: {
-        account: '',
-        password: '',
-        type: ''
-      },
       // 创建用户表单验证
       rules: {
         account: [
@@ -163,48 +139,42 @@ export default {
   },
   created () {
     this.roles = role.roles
-    this.getUserList()
+    this.getAllItem()
   },
   methods: {
-    // 获取角色
-    async getUserList () {
-      const result = await this.$http({
-        method: 'get',
-        url: 'api/users/getUsers',
+    async getAllItem(){
+        const result = await this.$http({
+        method: 'post',
+        url: 'api/shops/searchGoods',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-        }
+        },
+        data:{s_msg:''}
       })
-      this.tableData = result.data.data
-      this.showData = this.tableData
-      console.log(this.showData)
-      this.formInline.role = ''
+      if(result.data){
+           console.log(result.data)
+           this.showOrderData=result.data
+      }
     },
-    lookOrder(item,str){
-      this.str=str
-      this.dialogVisible=true
-      this.userAccount=item.user_account
-      this.showOrderData=item.user_order
-    },
-    async send(id){
-      console.log(id)
-      let that=this
-      const result = await this.$http({
+    async handle(state,id){
+      console.log(1)
+        const result = await this.$http({
         method: 'post',
-        url: 'api/users/sendProduct',
+        url: 'api/shops/handle',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
         },
         data:this.$qs.stringify({
-          user:that.userAccount,
-          id:id
+          state,id
         })
       })
       if(result.data.success){
-        this.$message.success('发货成功')
-        this.dialogVisible=false
-        this.getUserList()
+        this.$message.success('操作成功')
+        this.getAllItem()
       }
+    },
+    async addItem(){
+
     }
   }
 }

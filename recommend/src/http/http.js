@@ -1,6 +1,6 @@
 import axios from 'axios'
 import Vue from 'vue'
-axios.defaults.baseURL = 'http://127.0.0.1:4000/'
+axios.defaults.baseURL = 'http://127.0.0.1:3000/'
 // request拦截器，展示进度条
 Vue.prototype.$http = axios
 axios.interceptors.request.use(config => {
